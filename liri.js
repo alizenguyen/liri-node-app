@@ -37,6 +37,7 @@ function showTweets() {
     });
     
     var params = {
+        screen_name: 'node-testing',
         count: 20,
     };
 
