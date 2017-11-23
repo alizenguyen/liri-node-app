@@ -5,6 +5,9 @@ var keys = require("./keys.js");
 var userInput = process.argv[2];
 var userChoice = process.argv[3];
 
+var Twitter = require("twitter");
+var Spotify = require('node-spotify-api');
+
 // COMMANDS & OUTPUTS
 
 switch (userInput) {
@@ -26,8 +29,6 @@ switch (userInput) {
 // COMMAND FUNCTIONS
 
 function showTweets() {
-
-    var Twitter = require("twitter");
     
     var client = new Twitter({
         consumer_key: keys.consumer_key,
@@ -37,20 +38,23 @@ function showTweets() {
     });
     
     var params = {
-        screen_name: 'node-testing',
+        screen_name: 'node_testing',
         count: 20,
     };
 
     client.get('statuses/user_timeline', params, function (error, tweets, response) {
         if (!error) {
-            console.log(tweets);
-        }
+            for (var i = 0; i<tweets.length; i++) {
+                console.log("Tweet : '" + tweets[i].text + "' , created at " + tweets[i].created_at);
+            } 
+        } else {
+            console.log(error);
+        };
     });
+
 };
 
 function spotifySong() {
-
-    var Spotify = require('node-spotify-api');
 
     var spotify = new Spotify({
         id: "342380a4e1574dcea4a9500716e28c1d",
