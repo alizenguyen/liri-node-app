@@ -31,10 +31,10 @@ switch (userInput) {
 function showTweets() {
     
     var client = new Twitter({
-        consumer_key: keys.consumer_key,
-        consumer_secret: keys.consumer_secret,
-        access_token_key: keys.access_token_key,
-        access_token_secret: keys.access_token_secret
+        consumer_key: keys.twitterKeys.consumer_key,
+        consumer_secret: keys.twitterKeys.consumer_secret,
+        access_token_key: keys.twitterKeys.access_token_key,
+        access_token_secret: keys.twitterKeys.access_token_secret
     });
     
     var params = {
@@ -55,21 +55,26 @@ function showTweets() {
 };
 
 function spotifySong() {
-
+    var songInput = "The Sign"
     var spotify = new Spotify({
-        id: "342380a4e1574dcea4a9500716e28c1d",
-        secret: "fec13ce1905749b8a6df6f916864b9d0",
+        id: keys.spotifyKeys.id,
+        secret: keys.spotifyKeys.secret,
     });
+
+    if (userChoice !== undefined) {
+        songInput = userChoice;
+    }
 
     spotify.search({
         type: 'track',
-        query: 'All the Small Things'
+        query: songInput,
     }, function (err, data) {
         if (err) {
-            return console.log('Error occurred: ' + err);
-        }
-
-        console.log(data);
+            console.log('Error occurred: ' + err);
+        } else {
+            console.log(JSON.stringify(data, null, 2));
+            console.log("Artist: " + data.tracks.items[0].artists[0].name);
+        };
     });
 
 };
