@@ -90,8 +90,10 @@ function spotifySong(userChoice) {
 };
 
 function movieThis(userChoice) {
+    console.log("starthere")
+    console.log(userChoice)
 
-    if (userChoice === undefined) {
+    if (!userChoice) {
         userChoice = "Mr Nobody";
     } 
 
