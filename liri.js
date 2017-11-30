@@ -72,8 +72,11 @@ function spotifySong() {
         if (err) {
             console.log('Error occurred: ' + err);
         } else {
-            console.log(JSON.stringify(data, null, 2));
+            //console.log(JSON.stringify(data));
             console.log("Artist: " + data.tracks.items[0].artists[0].name);
+            console.log("Song's Name: " + data.tracks.items[0].name);
+            console.log("Preview Link: " + data.tracks.items[0].preview_url);
+            console.log("Album: " + data.tracks.items[0].album.name);
         };
     });
 
