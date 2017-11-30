@@ -3,7 +3,7 @@
 var keys = require("./keys.js");
 
 var userInput = process.argv[2];
-var userChoice = process.argv[3];
+var userChoice = process.argv.slice(3).join(" ");
 
 var Twitter = require("twitter");
 var Spotify = require('node-spotify-api');
@@ -13,17 +13,17 @@ var fs = require('fs');
 
 // COMMANDS & OUTPUTS
 
-switch (userInput, userChoice) {
+switch (userInput) {
     case "my-tweets":
         showTweets();
         break;
 
     case "spotify-this-song":
-        spotifySong();
+        spotifySong(userChoice);
         break;
 
     case "movie-this":
-        movieThis();
+        movieThis(userChoice);
         break;
 
     case "do-what-it-says":
@@ -60,19 +60,19 @@ function showTweets() {
 };
 
 function spotifySong(userChoice) {
-    var userChoice = "The Sign Ace of Base"
+
     var spotify = new Spotify({
         id: keys.spotifyKeys.id,
         secret: keys.spotifyKeys.secret,
     });
 
-    if (userChoice !== undefined) {
-        songInput = userChoice;
+    if (!userChoice) {
+        userChoice = "The Sign Ace of Base";
     } 
 
     spotify.search({
         type: 'track',
-        query: songInput,
+        query: userChoice,
     }, function (err, data) {
         if (err) {
             console.log('Error occurred: ' + err);
@@ -89,14 +89,13 @@ function spotifySong(userChoice) {
 
 };
 
-function movieThis() {
-    var movieName = process.argv.slice(3).join(" ");
+function movieThis(userChoice) {
 
-    if (movieName === undefined) {
-        movieName = "Mr. Nobody"
-    };
+    if (userChoice === undefined) {
+        userChoice = "Mr Nobody";
+    } 
 
-    var queryUrl = "http://www.omdbapi.com/?t=" + movieName + "&y=&plot=short&apikey=trilogy";
+    var queryUrl = "http://www.omdbapi.com/?t=" + userChoice + "&y=&plot=short&apikey=trilogy";
 
     console.log(queryUrl);
     
@@ -131,14 +130,13 @@ function doCommand() {
         var choice = dataArr[1];
 
         if (command === "spotify-this-song") {
-            songInput = choice;
-            spotifySong();
+            userChoice = choice;
+            spotifySong(userChoice);
         } else if (command === "movie this") {
-            movieName = choice;
+            userChoice = choice;
             movieThis();
         } else if (command === "showTweets") {
             showTweets();
         }
-
     });
 };
