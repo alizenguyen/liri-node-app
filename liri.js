@@ -8,6 +8,9 @@ var userChoice = process.argv[3];
 var Twitter = require("twitter");
 var Spotify = require('node-spotify-api');
 
+var request = require("request");
+var fs = require('fs');
+
 // COMMANDS & OUTPUTS
 
 switch (userInput) {
@@ -20,9 +23,11 @@ switch (userInput) {
         break;
 
     case "movie-this":
+        movieThis();
         break;
 
     case "do-what-it-says":
+        doCommand();
         break;
 };
 
@@ -55,7 +60,7 @@ function showTweets() {
 };
 
 function spotifySong() {
-    var songInput = "The Sign"
+    var songInput = "The Sign Ace of Base"
     var spotify = new Spotify({
         id: keys.spotifyKeys.id,
         secret: keys.spotifyKeys.secret,
@@ -63,7 +68,7 @@ function spotifySong() {
 
     if (userChoice !== undefined) {
         songInput = userChoice;
-    }
+    } 
 
     spotify.search({
         type: 'track',
@@ -73,11 +78,46 @@ function spotifySong() {
             console.log('Error occurred: ' + err);
         } else {
             //console.log(JSON.stringify(data));
+            console.log("******************************************************");
             console.log("Artist: " + data.tracks.items[0].artists[0].name);
             console.log("Song's Name: " + data.tracks.items[0].name);
             console.log("Preview Link: " + data.tracks.items[0].preview_url);
             console.log("Album: " + data.tracks.items[0].album.name);
+            console.log("******************************************************");
         };
     });
+
+};
+
+function movieThis() {
+    var movieName = process.argv.slice(3).join(" ");
+
+    if (movieName === undefined) {
+        movieName = "Mr. Nobody"
+    };
+
+    var queryUrl = "http://www.omdbapi.com/?t=" + movieName + "&y=&plot=short&apikey=trilogy";
+
+    console.log(queryUrl);
+    
+    request(queryUrl, function(error, response, body) {
+    
+      if (!error && response.statusCode === 200) {
+        
+        console.log("******************************************************");
+        console.log("Title: " + JSON.parse(body).Title);
+        console.log("Release Year: " + JSON.parse(body).Year);
+        console.log("IMDB Rating: " + JSON.parse(body).imdbRating);
+        console.log("Rotton Tomatoes Rating: " + JSON.parse(body).Ratings[1].Value);
+        console.log("Country Produced: " + JSON.parse(body).Country);
+        console.log("Plot: " + JSON.parse(body).Plot);
+        console.log("Actors: " + JSON.parse(body).Actors);
+        console.log("******************************************************");
+
+      }; 
+    });
+};
+
+function doCommand() {
 
 };
