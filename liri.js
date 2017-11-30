@@ -13,7 +13,7 @@ var fs = require('fs');
 
 // COMMANDS & OUTPUTS
 
-switch (userInput) {
+switch (userInput, userChoice) {
     case "my-tweets":
         showTweets();
         break;
@@ -59,8 +59,8 @@ function showTweets() {
 
 };
 
-function spotifySong() {
-    var songInput = "The Sign Ace of Base"
+function spotifySong(userChoice) {
+    var userChoice = "The Sign Ace of Base"
     var spotify = new Spotify({
         id: keys.spotifyKeys.id,
         secret: keys.spotifyKeys.secret,
@@ -119,5 +119,26 @@ function movieThis() {
 };
 
 function doCommand() {
+    fs.readFile("random.txt", "UTF8", function(error,data) {
 
+        if (error) {
+            console.log(error);
+        } 
+        console.log(data);
+
+        var dataArr = data.split(",");
+        var command = dataArr[0];
+        var choice = dataArr[1];
+
+        if (command === "spotify-this-song") {
+            songInput = choice;
+            spotifySong();
+        } else if (command === "movie this") {
+            movieName = choice;
+            movieThis();
+        } else if (command === "showTweets") {
+            showTweets();
+        }
+
+    });
 };
